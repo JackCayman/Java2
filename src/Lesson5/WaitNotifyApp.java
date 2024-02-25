@@ -2,7 +2,7 @@ package Lesson5;
 
 public class WaitNotifyApp {
 
-    Object locer = new Object();
+    Object lock = new Object();
 
     private String currentLetter = "B";
 
@@ -19,15 +19,15 @@ public class WaitNotifyApp {
     }
 
     public void printA() {
-        synchronized (locer) {
+        synchronized (lock) {
             try {
                 for (int i = 0; i < 5; i++) {
                     while (!currentLetter.equals("A")) {
-                        locer.wait();
+                        lock.wait();
                     }
                     System.out.print("A");
                     currentLetter = "B";
-                    locer.notifyAll();
+                    lock.notifyAll();
                 }
             } catch (InterruptedException ie) {
                 ie.printStackTrace();
@@ -35,15 +35,15 @@ public class WaitNotifyApp {
         }
     }
     public void printB() {
-        synchronized (locer) {
+        synchronized (lock) {
             try {
                 for (int i = 0; i < 5; i++) {
                     while (!currentLetter.equals("B")) {
-                        locer.wait();
+                        lock.wait();
                     }
                     System.out.print("B");
                     currentLetter = "A";
-                    locer.notifyAll();
+                    lock.notifyAll();
                 }
             } catch (InterruptedException ie) {
                 ie.printStackTrace();

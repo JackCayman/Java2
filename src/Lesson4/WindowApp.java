@@ -34,6 +34,15 @@ public class WindowApp extends JFrame {
         add(button);
 
 
+        textField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text = new String(textField.getText());
+                textMessages.add(text);
+            }
+        });
+
+
         setVisible(true);
 
     }
