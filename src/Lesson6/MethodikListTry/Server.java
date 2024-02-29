@@ -21,10 +21,12 @@ public class Server {
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             new Thread(() ->{
                 try {
-                    String str1 = sc.nextLine();
-                    System.out.println(str1);
+                    while (true) {
+                        String str1 = sc.nextLine();
+                        System.out.println(str1);
 
-                    out.writeUTF(str1);
+                        out.writeUTF(str1);
+                    }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
