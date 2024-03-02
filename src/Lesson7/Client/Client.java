@@ -101,6 +101,28 @@ public class Client extends JFrame {
         msgInputField = new JTextField();
         add(bottomPanel, BorderLayout.SOUTH);
         bottomPanel.add(msgInputField, BorderLayout.CENTER);
+
+        JPanel loginPanel = new JPanel(new BorderLayout());
+        JTextField loginField = new JTextField();
+        loginPanel.add(loginField, BorderLayout.WEST);
+        JTextField passField = new JTextField();
+        loginPanel.add(passField, BorderLayout.CENTER);
+        JButton authButton = new JButton("Авторизовватьсся");
+        loginPanel.add(authButton, BorderLayout.EAST);
+        add(loginPanel, BorderLayout.NORTH);
+
+        authButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    out.writeUTF(Constants.AUTH_COMMAND + " " + loginField.getText() + " " + passField.getText());
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+
         btnSendMsg.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

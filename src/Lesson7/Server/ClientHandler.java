@@ -50,6 +50,7 @@ public class ClientHandler {
             String nick = server.getAuthService().getNickByLoginAndPass(tokens[1],tokens[2]);
 
             if(nick != null){
+                // дописать проверку что такого ника нет вв чате(пользователь уже авторизован)
                 //авторизовались
                 name  = nick;
                 sendMessage(Constants.AUTH_OK_KOMAND + " " + nick);
@@ -71,11 +72,13 @@ public class ClientHandler {
     private void readMessage() throws IOException {
         while (true){
             String messageFromClient = in.readUTF();
+            //hint: можем получать команды
+            //
             System.out.println("Сообщениеот " + name + " " + messageFromClient);
             if(messageFromClient.equals(Constants.END_COMMAND)){
                 break;
             }
-           server.broadcastMessage(messageFromClient);
+           server.broadcastMessage(name + ": " + messageFromClient);
         }
     }
     private void closeConnection(){
