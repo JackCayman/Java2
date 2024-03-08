@@ -20,6 +20,7 @@ public class Client extends JFrame {
     private Socket socket;
     private DataInputStream in;
     private DataOutputStream out;
+    private String login;
 
     public Client() {
         try {
@@ -42,9 +43,17 @@ public class Client extends JFrame {
                         String strFromServer = in.readUTF();
                         if (strFromServer.equalsIgnoreCase("/end")) {
                             break;
+                        } else if (strFromServer.startsWith(Constants.AUTH_OK_KOMAND)) {
+                            String[] tokens = strFromServer.split("\\s+");
+                            login = tokens[1];
+                            chatArea.append("Успешно авторизован как " + login);
+                            chatArea.append("\n");
+                        } else if (strFromServer.startsWith(Constants.CLIENTS_LIST_COMMAND)) {
+                            // список клиентов
+                        } else {
+                            chatArea.append(strFromServer);
+                            chatArea.append("\n");
                         }
-                        chatArea.append(strFromServer);
-                        chatArea.append("\n");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -103,12 +112,12 @@ public class Client extends JFrame {
         bottomPanel.add(msgInputField, BorderLayout.CENTER);
 
         JPanel loginPanel = new JPanel(new BorderLayout());
-        JTextField loginField = new JTextField();
-        loginPanel.add(loginField, BorderLayout.WEST);
-        JTextField passField = new JTextField();
+        JTextField loginField = new JTextField("login");
+        loginPanel.add(loginField, BorderLayout.BEFORE_FIRST_LINE);
+        JTextField passField = new JTextField("pass");
         loginPanel.add(passField, BorderLayout.CENTER);
-        JButton authButton = new JButton("Авторизовватьсся");
-        loginPanel.add(authButton, BorderLayout.EAST);
+        JButton authButton = new JButton("Авторизоваться");
+        loginPanel.add(authButton, BorderLayout.AFTER_LAST_LINE);
         add(loginPanel, BorderLayout.NORTH);
 
         authButton.addActionListener(new ActionListener() {
@@ -155,7 +164,7 @@ public class Client extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new Lesson6.MethodikListTry.Client();
+                new Client();
             }
         });
     }

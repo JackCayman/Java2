@@ -1,4 +1,4 @@
-package CodeWars;
+package Practice;
 
 public class Grasshopper {
     public static void main(String[] args) {

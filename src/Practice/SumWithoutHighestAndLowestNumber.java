@@ -1,4 +1,4 @@
-package CodeWars;
+package Practice;
 
 public class SumWithoutHighestAndLowestNumber {
     public static int main(String[] args) {

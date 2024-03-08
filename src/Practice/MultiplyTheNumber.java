@@ -1,4 +1,4 @@
-package CodeWars;
+package Practice;
 
 public class MultiplyTheNumber {
     public static void main(String[] args) {

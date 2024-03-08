@@ -7,6 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Логика сервера.
@@ -27,42 +28,54 @@ public class Myserver {
         return authService;
     }
 
-    public Myserver(){
-        try (ServerSocket server = new ServerSocket(Constants.SERVER_PORT)){
+    public Myserver() {
+        try (ServerSocket server = new ServerSocket(Constants.SERVER_PORT)) {
             authService = new BaseAutService();
             authService.start();
 
             clients = new ArrayList<>();
 
-            while (true){
+            while (true) {
                 System.out.println("Серве ожидает подклучение");
-                Socket socket =server.accept();
+                Socket socket = server.accept();
                 System.out.println("Клиент подключился");
-                new ClientHandler(this,socket);
+                new ClientHandler(this, socket);
             }
 
-        }catch (IOException ex){
+        } catch (IOException ex) {
             System.out.println("Ошибка  в работесервера");
             ex.printStackTrace();
-        }finally {
-            if(authService !=null){
+        } finally {
+            if (authService != null) {
                 authService.stop();
             }
         }
     }
 
-    public synchronized void broadcastMessage(String message){
+    public synchronized void broadcastMessage(String message) {
         clients.forEach(client -> client.sendMessage(message));
         /*for (ClientHandler client : clients) {
             client.sendMessage(message);
         }*/
     }
 
-    public synchronized void subscribe(ClientHandler client){
+    public synchronized void subscribe(ClientHandler client) {
         clients.add(client);
     }
-    public synchronized void unSubscribe(ClientHandler client){
+
+    public synchronized void unSubscribe(ClientHandler client) {
         clients.remove(client);
     }
 
+    public synchronized String getActivClients() {
+        StringBuilder sb = new StringBuilder(Constants.CLIENTS_LIST_COMMAND).append(" ");
+        sb.append(clients.stream()
+                .map(c -> c.getName())
+                .collect(Collectors.joining(" "))
+        );
+        /*for (ClientHandler client : clients) {
+            sb.append(client.getName()).append(" ");
+        }*/
+        return sb.toString();
+    }
 }
